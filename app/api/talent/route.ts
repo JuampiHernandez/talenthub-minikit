@@ -28,6 +28,52 @@ function logDebugInfo(message: string, data?: unknown): void {
   }
 }
 
+// Mock data for when API access fails
+const mockResponse = {
+  profiles: [
+    {
+      id: "101",
+      display_name: "Alex Johnson",
+      username: "alexj",
+      bio: "Full-stack developer specializing in React and Node.js",
+      image_url: "https://randomuser.me/api/portraits/men/1.jpg",
+      builder_score: { points: 85 },
+      human_checkmark: true,
+      tags: ["React", "Node.js", "TypeScript"]
+    },
+    {
+      id: "102",
+      display_name: "Sarah Williams",
+      username: "sarahw",
+      bio: "Frontend developer with a passion for UI/UX",
+      image_url: "https://randomuser.me/api/portraits/women/2.jpg",
+      builder_score: { points: 78 },
+      human_checkmark: true,
+      tags: ["JavaScript", "React", "CSS"]
+    },
+    {
+      id: "103",
+      display_name: "Miguel Sanchez",
+      username: "miguels",
+      bio: "Backend engineer specialized in scalable systems",
+      image_url: "https://randomuser.me/api/portraits/men/3.jpg",
+      builder_score: { points: 92 },
+      human_checkmark: true,
+      tags: ["Go", "Microservices", "Docker"]
+    },
+    {
+      id: "104",
+      display_name: "Emily Chen",
+      username: "emilyc",
+      bio: "Machine learning engineer with focus on computer vision",
+      image_url: "https://randomuser.me/api/portraits/women/4.jpg",
+      builder_score: { points: 88 },
+      human_checkmark: true,
+      tags: ["Python", "TensorFlow", "Computer Vision"]
+    }
+  ]
+};
+
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const endpoint = searchParams.get('endpoint');
@@ -39,6 +85,44 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'Missing endpoint parameter' }, { status: 400 });
   }
 
+  // Check if API key is available
+  if (!API_KEY) {
+    logDebugInfo('API Key is missing in environment variables, returning mock data');
+    
+    // If this is a credential endpoint, return mock credential data
+    if (endpoint.includes('credentials')) {
+      return NextResponse.json({ 
+        user_credentials: [
+          {
+            credential: {
+              name: "GitHub Stars",
+              slug: "github-stars",
+              data_issuer: "GitHub"
+            },
+            value: 120
+          },
+          {
+            credential: {
+              name: "GitHub Repositories",
+              slug: "github-repositories",
+              data_issuer: "GitHub"
+            },
+            value: 25
+          }
+        ]
+      });
+    }
+    
+    return NextResponse.json(mockResponse);
+  }
+
+  // Log API key length and first/last few characters for debugging
+  logDebugInfo(`API Key length: ${API_KEY.length}`);
+  if (API_KEY.length > 8) {
+    const maskedKey = `${API_KEY.substring(0, 4)}...${API_KEY.substring(API_KEY.length - 4)}`;
+    logDebugInfo(`API Key (masked): ${maskedKey}`);
+  }
+
   try {
     const apiUrl = `${API_BASE_URL}/${endpoint}`;
     logDebugInfo(`Forwarding GET request to: ${apiUrl}`);
@@ -48,7 +132,7 @@ export async function GET(request: NextRequest) {
     
     const response = await fetch(apiUrl, {
       headers: {
-        'X-API-KEY': API_KEY || '',
+        'X-API-KEY': API_KEY,
         'Accept': 'application/json',
       },
     });
@@ -124,6 +208,28 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Missing endpoint parameter' }, { status: 400 });
   }
 
+  // Check if API key is available
+  if (!API_KEY) {
+    logDebugInfo('API Key is missing in environment variables, returning mock data');
+    
+    // Return mock data for search endpoints
+    if (endpoint.includes('search')) {
+      return NextResponse.json(mockResponse);
+    }
+    
+    return NextResponse.json({ 
+      success: true,
+      message: "Mock data returned due to missing API key"
+    });
+  }
+
+  // Log API key length and first/last few characters for debugging
+  logDebugInfo(`API Key length: ${API_KEY.length}`);
+  if (API_KEY.length > 8) {
+    const maskedKey = `${API_KEY.substring(0, 4)}...${API_KEY.substring(API_KEY.length - 4)}`;
+    logDebugInfo(`API Key (masked): ${maskedKey}`);
+  }
+
   try {
     const body = await request.json();
     logDebugInfo('Request body:', body);
@@ -141,19 +247,12 @@ export async function POST(request: NextRequest) {
       logDebugInfo(`Full URL for API request: ${url}`);
       
       // Log API key for debugging (masked for security)
-      const apiKey = API_KEY || '';
-      logDebugInfo(`API Key present: ${apiKey ? 'Yes' : 'No'}`);
-      if (apiKey) {
-        const maskedKey = apiKey.substring(0, 4) + '...' + apiKey.substring(apiKey.length - 4);
-        logDebugInfo(`API Key (masked): ${maskedKey}`);
-      } else {
-        logDebugInfo('API Key is missing! Check your environment variables.');
-      }
+      logDebugInfo(`API Key present: ${Boolean(API_KEY) ? 'Yes' : 'No'}`);
       
       const response = await fetch(url, {
         method: 'GET',
         headers: {
-          'X-API-KEY': apiKey,
+          'X-API-KEY': API_KEY,
           'Accept': 'application/json',
         },
       });
@@ -191,7 +290,7 @@ export async function POST(request: NextRequest) {
       const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
-          'X-API-KEY': API_KEY || '',
+          'X-API-KEY': API_KEY,
           'Accept': 'application/json',
           'Content-Type': 'application/json',
         },
