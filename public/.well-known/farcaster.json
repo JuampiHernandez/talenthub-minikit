@@ -1,5 +1,5 @@
 {
-  "accountassociation": {
+  "accountAssociation": {
     "header": "eyJmaWQiOjY3MzAsInR5cGUiOiJjdXN0b2R5Iiwia2V5IjoiMHhCRTE1NjIyNzQ1NkVGY0I1NkZEMDEwMzdGMjNiNWNBNGIxM0QzNkMxIn0",
     "payload": "eyJkb21haW4iOiJ0YWxlbnRodWItbWluaWtpdC1haWN2LnZlcmNlbC5hcHAifQ",
     "signature": "MHg2ZTZiM2Q3MmI1MDYyM2VmNzc3YjcwYTQxNDljNzgzMjdiNWZjMDI3ODU5NWYyMjE3NWIzZGU4MTgxOTUxZjRjNmFkMmFjMWU2ODI4YTc0YmY0NGViZjE1ZWY5ZjIxNDc3M2Q1NGEyODliM2UyODlkNjVjZGQwZDYxNTYzZDE2ZDFi"
