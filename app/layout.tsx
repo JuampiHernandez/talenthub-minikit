@@ -12,14 +12,14 @@ export const viewport: Viewport = {
 // Define frame metadata for Farcaster embedding
 const frame = {
   version: "next",
-  imageUrl: "https://talenthub-minikit-aicv.vercel.app/logo.png",
+  imageUrl: "https://talenthub-minikit.vercel.app/logo.png",
   button: {
     title: "Launch TalentHub",
     action: {
       type: "launch_frame",
       name: "TalentHub",
-      url: "https://talenthub-minikit-aicv.vercel.app/",
-      splashImageUrl: "https://talenthub-minikit-aicv.vercel.app/logo.png",
+      url: "https://talenthub-minikit.vercel.app/",
+      splashImageUrl: "https://talenthub-minikit.vercel.app/logo.png",
       splashBackgroundColor: "#0052FF",
     },
   },
