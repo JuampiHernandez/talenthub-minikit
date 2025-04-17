@@ -2,12 +2,12 @@
   "frame": {
     "version": "0.0.1",
     "name": "TalentHub",
-    "homeUrl": "https://talenthub-minikit.vercel.app",
-    "iconUrl": "https://talenthub-minikit.vercel.app/logo.svg",
-    "imageUrl": "https://talenthub-minikit.vercel.app/logo.svg",
+    "homeUrl": "https://talenthub-minikit-aicv.vercel.app/",
+    "iconUrl": "https://talenthub-minikit-aicv.vercel.app/logo.png",
+    "imageUrl": "https://talenthub-minikit-aicv.vercel.app/logo.png",
     "buttonTitle": "Launch TalentHub",
-    "splashImageUrl": "https://talenthub-minikit.vercel.app/logo.svg",
+    "splashImageUrl": "https://talenthub-minikit-aicv.vercel.app/logo.png",
     "splashBackgroundColor": "#0052FF",
-    "webhookUrl": "https://talenthub-minikit.vercel.app/api/webhook"
+    "webhookUrl": "https://talenthub-minikit-aicv.vercel.app/api/webhook"
   }
 } 
