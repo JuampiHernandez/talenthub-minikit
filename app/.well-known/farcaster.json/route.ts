@@ -1,22 +1,29 @@
-export async function GET() {
-  const URL = process.env.NEXT_PUBLIC_URL;
+import { NextResponse } from 'next/server';
 
-  return Response.json({
-    accountAssociation: {
-      header: process.env.FARCASTER_HEADER,
-      payload: process.env.FARCASTER_PAYLOAD,
-      signature: process.env.FARCASTER_SIGNATURE,
-    },
-    frame: {
-      version: process.env.NEXT_PUBLIC_VERSION,
-      name: process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME,
-      homeUrl: URL,
-      iconUrl: process.env.NEXT_PUBLIC_ICON_URL,
-      imageUrl: process.env.NEXT_PUBLIC_IMAGE_URL,
-      buttonTitle: `Launch ${process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME}`,
-      splashImageUrl: process.env.NEXT_PUBLIC_SPLASH_IMAGE_URL,
-      splashBackgroundColor: `#${process.env.NEXT_PUBLIC_SPLASH_BACKGROUND_COLOR}`,
-      webhookUrl: `${URL}/api/webhook`,
-    },
+export async function GET() {
+  return NextResponse.json({
+    "miniApp": {
+      "name": "TalentHub",
+      "description": "Find talented developers with verified credentials from Talent Protocol",
+      "icons": [
+        {
+          "src": "/logo.svg",
+          "sizes": "512x512",
+          "type": "image/svg+xml"
+        }
+      ],
+      "image": {
+        "src": "/logo.svg"
+      },
+      "domains": ["talenthub-minikit.vercel.app", "localhost:3000"],
+      "permissions": [
+        "notification:read",
+        "notification:write",
+        "frame:read",
+        "frame:write",
+        "user:read",
+        "cast:write"
+      ]
+    }
   });
 }

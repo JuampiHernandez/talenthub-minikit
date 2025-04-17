@@ -10,6 +10,19 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
+export const metadata = {
+  title: 'TalentHub - Find top developers with verified credentials',
+  description: 'A recruitment mini app powered by Talent Protocol API',
+  icons: {
+    icon: '/logo.svg',
+  },
+  // Add Mini App specific metadata
+  miniApp: {
+    name: 'TalentHub',
+    description: 'Find talented developers with verified credentials from Talent Protocol',
+  },
+};
+
 export async function generateMetadata(): Promise<Metadata> {
   const URL = process.env.NEXT_PUBLIC_URL;
   return {
