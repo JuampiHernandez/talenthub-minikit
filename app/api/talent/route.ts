@@ -3,13 +3,26 @@ import { NextRequest, NextResponse } from 'next/server';
 const API_BASE_URL = 'https://api.talentprotocol.com';
 const API_KEY = process.env.TALENT_PROTOCOL_API_KEY;
 
+// Define interfaces for credential data types
+interface Credential {
+  name: string;
+  slug?: string;
+  data_issuer: string;
+  value?: string | number | boolean;
+}
+
+interface UserCredential {
+  credential?: Credential;
+  value?: string | number | boolean;
+}
+
 // Enhanced logging for better debugging
-function logDebugInfo(message: string, data?: any) {
+function logDebugInfo(message: string, data?: unknown): void {
   console.log(`[Talent API Route] ${message}`);
   if (data) {
     try {
       console.log(JSON.stringify(data, null, 2));
-    } catch (e) {
+    } catch {
       console.log('Could not stringify data:', data);
     }
   }
@@ -67,7 +80,7 @@ export async function GET(request: NextRequest) {
         logDebugInfo(`Found ${data.user_credentials.length} credentials for profile`);
         
         // Log each credential with formatted details
-        data.user_credentials.forEach((cred: any, index: number) => {
+        data.user_credentials.forEach((cred: UserCredential, index: number) => {
           const credName = cred.credential?.name || 'Unknown';
           const credIssuer = cred.credential?.data_issuer || 'Unknown';
           const credValue = cred.value !== undefined ? cred.value : 'N/A';
@@ -76,13 +89,13 @@ export async function GET(request: NextRequest) {
         });
         
         // Create a simplified map for easier debugging
-        const credentialMap: Record<string, any> = {};
-        data.user_credentials.forEach((cred: any) => {
+        const credentialMap: Record<string, Record<string, string | number | boolean>> = {};
+        data.user_credentials.forEach((cred: UserCredential) => {
           if (cred.credential?.slug) {
             credentialMap[cred.credential.slug] = {
               name: cred.credential.name,
               issuer: cred.credential.data_issuer,
-              value: cred.value
+              value: cred.value !== undefined ? cred.value : 'N/A'
             };
           }
         });

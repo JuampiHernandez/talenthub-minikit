@@ -5,7 +5,6 @@ import {
   useAddFrame,
   useOpenUrl,
   useClose,
-  useViewProfile,
   useNotification,
 } from "@coinbase/onchainkit/minikit";
 import { useEffect, useMemo, useState, useCallback } from "react";
@@ -64,7 +63,7 @@ function DebugPanel({
   apiData, 
   isVisible 
 }: { 
-  apiData: any; 
+  apiData: Record<string, unknown> | null; 
   isVisible: boolean 
 }) {
   if (!isVisible) return null;
@@ -91,15 +90,14 @@ export default function App() {
   
   // Add states for debugging and error handling
   const [debugMode, setDebugMode] = useState(false);
-  const [apiResponseData, setApiResponseData] = useState<any>(null);
+  const [apiResponseData, setApiResponseData] = useState<Record<string, unknown> | null>(null);
   const [error, setError] = useState<string | null>(null);
   // Add state for profile credential data
-  const [profileCredentialData, setProfileCredentialData] = useState<any>(null);
+  const [profileCredentialData, setProfileCredentialData] = useState<Record<string, unknown> | null>(null);
 
   const addFrame = useAddFrame();
   const openUrl = useOpenUrl();
   const closeApp = useClose();
-  const viewProfile = useViewProfile();
   const sendNotification = useNotification();
 
   // Initialize the app
@@ -128,10 +126,10 @@ export default function App() {
   }, [addFrame, sendNotification]);
 
   // Extract a user-friendly error message
-  const extractErrorMessage = useCallback((apiError: any): string => {
+  const extractErrorMessage = useCallback((apiError: Record<string, unknown>): string => {
     try {
       // Check if it's a structured error from our API
-      if (apiError.details) {
+      if (typeof apiError.details === 'string') {
         // Try to parse JSON error messages
         if (apiError.details.includes('{')) {
           const match = apiError.details.match(/\{.*\}/);
@@ -145,7 +143,7 @@ export default function App() {
         return apiError.details;
       }
       // If it's a simple error message
-      else if (apiError.error) {
+      else if (typeof apiError.error === 'string') {
         return apiError.error;
       }
       // If error is a string

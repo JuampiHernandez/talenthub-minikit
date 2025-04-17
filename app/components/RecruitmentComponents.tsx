@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
+import Image from 'next/image';
 import { useNotification } from "@coinbase/onchainkit/minikit";
 import { TalentProfile, CredentialOption, CREDENTIAL_OPTIONS_GROUPED } from '../../lib/talentProtocolService';
 
@@ -14,13 +15,6 @@ export function ProfileList({
   onProfileClick: (profile: TalentProfile) => void;
   selectedCredential: CredentialOption;
 }) {
-  // Format credential value for display
-  const formatCredentialValue = (value: any) => {
-    if (value === undefined) return 'N/A';
-    if (typeof value === 'boolean') return value ? 'Yes' : 'No';
-    return value.toString();
-  };
-
   return (
     <div className="space-y-4">
       {profiles.length === 0 ? (
@@ -48,11 +42,13 @@ export function ProfileList({
               >
                 <div className="flex items-start">
                   <div className="flex-shrink-0 mr-3">
-                    <div className="w-10 h-10 rounded-full overflow-hidden">
-                      <img 
+                    <div className="w-10 h-10 rounded-full overflow-hidden relative">
+                      <Image 
                         src={profile.profilePicture || "https://via.placeholder.com/50"} 
                         alt={profile.fullName} 
-                        className="w-full h-full object-cover"
+                        className="object-cover"
+                        fill
+                        sizes="40px"
                       />
                     </div>
                   </div>
@@ -96,12 +92,10 @@ export function ProfileDetail({
   onBack: () => void;
   selectedCredential: CredentialOption;
   debugMode?: boolean;
-  credentialData?: any;
+  credentialData?: Record<string, any> | null;
 }) {
-  const sendNotification = useNotification();
-
   // Format credential value for display
-  const formatCredentialValue = (value: any) => {
+  const formatCredentialValue = (value: string | number | boolean | undefined): string => {
     if (value === undefined) return 'N/A';
     if (typeof value === 'boolean') return value ? 'Yes' : 'No';
     return value.toString();
@@ -127,11 +121,13 @@ export function ProfileDetail({
         </button>
         
         <div className="flex items-start mb-6">
-          <div className="w-20 h-20 rounded-full overflow-hidden mr-4 flex-shrink-0">
-            <img 
+          <div className="w-20 h-20 rounded-full overflow-hidden mr-4 flex-shrink-0 relative">
+            <Image 
               src={profile.profilePicture || "https://via.placeholder.com/150"} 
               alt={profile.fullName} 
-              className="w-full h-full object-cover"
+              className="object-cover"
+              fill
+              sizes="80px"
             />
           </div>
           <div>
